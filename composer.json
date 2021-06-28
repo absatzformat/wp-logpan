@@ -1,0 +1,27 @@
+{
+    "name": "absatzformat/wp-logpan",
+    "description": "LogPan plugin for WordPress.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Johannes Rabausch",
+            "email": "jrabausch@absatzformat.de"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/absatzformat/logpan-logger.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Absatzformat\\WPLogPan\\": "src/"
+        }
+    },
+    "require": {
+        "absatzformat/logpan-logger": "@dev",
+        "psr/log": "^1.1"
+    }
+}
