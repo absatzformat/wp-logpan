@@ -12,16 +12,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/absatzformat/logpan-logger.git",
-                "reference": "a8f418f3847955cb2d44e063c4631a8bc87ab93a"
+                "reference": "d4c23113d6cc26f05201005aa5df049a634a36c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/absatzformat/logpan-logger/zipball/a8f418f3847955cb2d44e063c4631a8bc87ab93a",
-                "reference": "a8f418f3847955cb2d44e063c4631a8bc87ab93a",
+                "url": "https://api.github.com/repos/absatzformat/logpan-logger/zipball/d4c23113d6cc26f05201005aa5df049a634a36c7",
+                "reference": "d4c23113d6cc26f05201005aa5df049a634a36c7",
                 "shasum": ""
             },
             "require": {
                 "psr/log": "^1.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "vimeo/psalm": "^4.8"
             },
             "default-branch": true,
             "type": "library",
@@ -29,6 +33,11 @@
                 "psr-4": {
                     "LogPan\\Logger\\": "src/"
                 }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit tests"
+                ]
             },
             "license": [
                 "MIT"
@@ -44,7 +53,7 @@
                 "source": "https://github.com/absatzformat/logpan-logger/tree/main",
                 "issues": "https://github.com/absatzformat/logpan-logger/issues"
             },
-            "time": "2021-06-28T15:14:32+00:00"
+            "time": "2021-07-02T12:45:02+00:00"
         },
         {
             "name": "psr/log",

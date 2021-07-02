@@ -11,8 +11,9 @@
 
 declare(strict_types=1);
 
-use Absatzformat\WPLogPan\LogAdaptor;
+use Absatzformat\WPLogPan\WPLogPan;
 use LogPan\Logger\Logger;
+use LogPan\Logger\SocketHandler;
 
 defined('ABSPATH') || die();
 
@@ -24,7 +25,26 @@ define('Absatzformat\WPLogPan\MENU_SLUG', Absatzformat\WPLogPan\PLUGIN_SLUG);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-LogAdaptor::getInstance()->setLogger(new Logger(
-	'',
-	1
-));
+WPLogPan::getInstance(true)->setLogger(new Logger(new SocketHandler(
+	'https://logpan.absatzprojekt.de',
+	2,
+	'1234',
+	'/channel',
+	true
+)));
+
+if (!function_exists('lp_debug')) {
+
+	function lp_debug(): void
+	{
+		$args = func_get_args();
+		$logpan = WPLogPan::getInstance();
+		$level = $logpan->getBacktraceLevel();
+
+		$logpan->setBacktraceLevel($level + 1);
+		$logpan->debug(...$args);
+		$logpan->setBacktraceLevel($level);
+	}
+}
+
+add_action('shutdown', [WPLogPan::getInstance(), 'flushDebugLines']);
