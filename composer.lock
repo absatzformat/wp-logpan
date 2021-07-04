@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c33197d625045ac365df4c18e21b529b",
+    "content-hash": "a0e967b9c1eaad557b355dad51b2b832",
     "packages": [
         {
-            "name": "absatzformat/logpan-logger",
+            "name": "logjar/logger",
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/absatzformat/logpan-logger.git",
-                "reference": "d4c23113d6cc26f05201005aa5df049a634a36c7"
+                "url": "https://github.com/logjar/logger.git",
+                "reference": "0c726f7019690e6a0978b9a38ccbe706533b5d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/absatzformat/logpan-logger/zipball/d4c23113d6cc26f05201005aa5df049a634a36c7",
-                "reference": "d4c23113d6cc26f05201005aa5df049a634a36c7",
+                "url": "https://api.github.com/repos/logjar/logger/zipball/0c726f7019690e6a0978b9a38ccbe706533b5d67",
+                "reference": "0c726f7019690e6a0978b9a38ccbe706533b5d67",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "LogPan\\Logger\\": "src/"
+                    "Logjar\\Logger\\": "src/"
                 }
             },
             "scripts": {
@@ -48,12 +48,12 @@
                     "email": "jrabausch@absatzformat.de"
                 }
             ],
-            "description": "PSR-3 logger for LogPan.",
+            "description": "PSR-3 logger for Logjar.",
             "support": {
-                "source": "https://github.com/absatzformat/logpan-logger/tree/main",
-                "issues": "https://github.com/absatzformat/logpan-logger/issues"
+                "source": "https://github.com/logjar/logger/tree/main",
+                "issues": "https://github.com/logjar/logger/issues"
             },
-            "time": "2021-07-02T12:45:02+00:00"
+            "time": "2021-07-04T10:03:19+00:00"
         },
         {
             "name": "psr/log",
@@ -110,7 +110,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "absatzformat/logpan-logger": 20
+        "logjar/logger": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -1,6 +1,6 @@
 {
-    "name": "absatzformat/wp-logpan",
-    "description": "LogPan plugin for WordPress.",
+    "name": "logjar/wp-logjar",
+    "description": "Logjar plugin for WordPress.",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -12,16 +12,16 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/absatzformat/logpan-logger.git"
+            "url": "https://github.com/logjar/logger.git"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Absatzformat\\WPLogPan\\": "src/"
+            "WPLogjar\\": "src/"
         }
     },
     "require": {
-        "absatzformat/logpan-logger": "@dev",
+        "logjar/logger": "@dev",
         "psr/log": "^1.1"
     }
 }

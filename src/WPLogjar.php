@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Absatzformat\WPLogPan;
+namespace WPLogjar;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-final class WPLogPan implements LoggerAwareInterface
+final class WPLogjar implements LoggerAwareInterface
 {
 	/** @var null|self */
 	protected static $instance;

@@ -1,2 +1,2 @@
-# wp-logpan
-LogPan plugin for WordPress
+# WP Logjar
+Logjar plugin for WordPress
