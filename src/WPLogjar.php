@@ -4,42 +4,99 @@ declare(strict_types=1);
 
 namespace WPLogjar;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
+use Logjar\Logger\Logger;
+use Logjar\Logger\SocketHandler;
 
-final class WPLogjar implements LoggerAwareInterface
+final class WPLogjar
 {
-	use LoggerAwareTrait;
-
 	/** @var null|self */
 	protected static $instance;
 
-	/** @var int */
-	protected $backtraceLevel = 0;
+	/** @var LogAdaptor */
+	protected $logAdaptor;
 
-	/** @var bool */
-	protected $logErrors;
-
-	/** @var array<int, string> */
-	protected $errorConstants;
-
-	/** @var array */
-	protected $debugLines = [];
-
-	protected function __construct(bool $logErrors)
+	protected function __construct()
 	{
-		$this->logErrors = $logErrors;
-		$this->errorConstants = $this->getErrorConstants();
+		$options = get_option('logjar_options');
 
-		set_error_handler([$this, 'errorHandler']);
+		$this->logAdaptor = new LogAdaptor(true);
+		$this->logAdaptor->setLogger(new Logger(new SocketHandler(
+			($options['server_address'] ?? '') . ':' . ($options['server_port'] ?? ''),
+			(int)($options['log_channel'] ?? 1),
+			($options['server_token'] ?? ''),
+			empty($options['log_path']) ? '/channel' : $options['log_path']
+		)));
+
+		if (is_admin()) {
+
+			add_action('admin_menu', [$this, 'adminMenu']);
+			add_action('admin_init', [$this, 'adminInit']);
+		}
+
+		add_action('shutdown', [$this->logAdaptor, 'flushDebugLines']);
 	}
 
-	protected static function getErrorConstants(): array
+	public function getLogAdaptor(): LogAdaptor
 	{
-		$constants = get_defined_constants(true)['Core'];
-		$constants = array_slice($constants, 0, 16, true);
+		return $this->logAdaptor;
+	}
 
-		return array_flip($constants);
+	public function adminMenu(): void
+	{
+		add_options_page(
+			__('Logjar Logger', 'logjar'),
+			__('Logjar Logger', 'logjar'),
+			'manage_options',
+			PLUGIN_SLUG,
+			[$this, 'displayOptionsPage']
+		);
+	}
+
+	public function adminInit(): void
+	{
+		register_setting('logjar_options', 'logjar_options', [$this, 'optionsValidate']);
+	}
+
+	public function optionsValidate($input)
+	{
+		$options = get_option('logjar_options');
+
+		if (isset($input['server_address'])) {
+			$options['server_address'] = $input['server_address'];
+		}
+
+		if (isset($input['server_address'])) {
+			$options['server_address'] = $input['server_address'];
+		}
+
+		if (isset($input['server_port'])) {
+			$options['server_port'] = $input['server_port'];
+		}
+
+		if (isset($input['server_token'])) {
+			$options['server_token'] = $input['server_token'];
+		}
+
+		if (isset($input['log_path'])) {
+			$options['log_path'] = $input['log_path'];
+		}
+
+		if (isset($input['log_channel'])) {
+			$options['log_channel'] = (int)$input['log_channel'];
+		}
+
+		if (isset($input['log_level'])) {
+			$options['log_level'] = (int)$input['log_level'];
+		}
+
+		return $options;
+	}
+
+	public function displayOptionsPage(): void
+	{
+		$options = get_option('logjar_options');
+
+		include __DIR__ . '/../views/logjar-settings.php';
 	}
 
 	public static function getInstance(bool $logErrors = false): self
@@ -49,57 +106,5 @@ final class WPLogjar implements LoggerAwareInterface
 		}
 
 		return self::$instance;
-	}
-
-	public function setBacktraceLevel(int $level): void
-	{
-		$this->backtraceLevel = $level;
-	}
-
-	public function getBacktraceLevel(): int
-	{
-		return $this->backtraceLevel;
-	}
-
-	public function errorHandler(int $errno, string $errstr, string $errfile, int $errline): bool
-	{
-		if ($this->logErrors && $this->logger) {
-
-			$context = [
-				'type' => $this->errorConstants[$errno],
-				'message' => $errstr,
-				'file' => $errfile,
-				'line' => $errline
-			];
-
-			$this->logger->error('{type}: {message} in {file} on line {line}', $context);
-		}
-
-		return false;
-	}
-
-	public function debug(): void
-	{
-		$args = func_get_args();
-		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$line = $backtrace[$this->backtraceLevel]['file'] . ':' . $backtrace[$this->backtraceLevel]['line'];
-
-		foreach ($args as $var) {
-			$this->debugLines[$line][] = var_export($var, true);
-		}
-	}
-
-	public function flushDebugLines(): void
-	{
-		if ($this->logger) {
-
-			foreach ($this->debugLines as $line => $vars) {
-
-				$data = implode("\n", $vars);
-				$this->logger->debug("$line\n$data");
-			}
-
-			$this->debugLines = [];
-		}
 	}
 }

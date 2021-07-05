@@ -12,11 +12,8 @@
 
 declare(strict_types=1);
 
-use Logjar\Logger\Logger;
-use Logjar\Logger\SocketHandler;
 use WPLogjar\WPLogjar;
 
-use const WPLogjar\MENU_SLUG;
 use const WPLogjar\PLUGIN_SLUG;
 
 defined('ABSPATH') || die();
@@ -29,31 +26,18 @@ define('WPLogjar\MENU_SLUG', PLUGIN_SLUG);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-WPLogjar::getInstance(true)->setLogger(new Logger(new SocketHandler(
-	'http://192.168.178.44:8080',
-	2,
-	'1234'
-)));
+WPLogjar::getInstance();
 
-if (!function_exists('lp_debug')) {
+if (!function_exists('logjar')) {
 
-	function lp_debug(): void
+	function logjar(): void
 	{
 		$args = func_get_args();
-		$logjar = WPLogjar::getInstance();
-		$level = $logjar->getBacktraceLevel();
+		$adaptor = WPLogjar::getInstance()->getLogAdaptor();
+		$level = $adaptor->getBacktraceLevel();
 
-		$logjar->setBacktraceLevel($level + 1);
-		$logjar->debug(...$args);
-		$logjar->setBacktraceLevel($level);
+		$adaptor->setBacktraceLevel($level + 1);
+		$adaptor->debug(...$args);
+		$adaptor->setBacktraceLevel($level);
 	}
 }
-
-add_action('shutdown', [WPLogjar::getInstance(), 'flushDebugLines']);
-
-
-add_action('admin_menu', function () {
-	add_options_page(__('Logjar', 'logjar'), __('Logjar', 'logjar'), 'manage_options', MENU_SLUG, function () {
-		include __DIR__ . '/views/logjar-settings.php';
-	});
-});
