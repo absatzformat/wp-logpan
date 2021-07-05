@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace WPLogjar;
 
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 final class WPLogjar implements LoggerAwareInterface
 {
+	use LoggerAwareTrait;
+
 	/** @var null|self */
 	protected static $instance;
-
-	/** @var null|LoggerInterface */
-	protected $logger;
 
 	/** @var int */
 	protected $backtraceLevel = 0;
@@ -50,11 +49,6 @@ final class WPLogjar implements LoggerAwareInterface
 		}
 
 		return self::$instance;
-	}
-
-	public function setLogger(LoggerInterface $logger): void
-	{
-		$this->logger = $logger;
 	}
 
 	public function setBacktraceLevel(int $level): void
