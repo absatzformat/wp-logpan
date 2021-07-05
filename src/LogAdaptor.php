@@ -27,8 +27,6 @@ final class LogAdaptor implements LoggerAwareInterface
 	{
 		$this->logErrors = $logErrors;
 		$this->errorConstants = $this->getErrorConstants();
-
-		set_error_handler([$this, 'errorHandler']);
 	}
 
 	protected static function getErrorConstants(): array

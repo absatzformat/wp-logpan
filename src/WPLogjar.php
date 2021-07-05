@@ -19,13 +19,15 @@ final class WPLogjar
 	{
 		$options = get_option('logjar_options');
 
-		$this->logAdaptor = new LogAdaptor(true);
-		$this->logAdaptor->setLogger(new Logger(new SocketHandler(
+		$handler = new SocketHandler(
 			($options['server_address'] ?? '') . ':' . ($options['server_port'] ?? ''),
 			(int)($options['log_channel'] ?? 1),
 			($options['server_token'] ?? ''),
 			empty($options['log_path']) ? '/channel' : $options['log_path']
-		)));
+		);
+
+		$this->logAdaptor = new LogAdaptor(true);
+		$this->logAdaptor->setLogger(new Logger($handler));
 
 		if (is_admin()) {
 
@@ -99,10 +101,10 @@ final class WPLogjar
 		include __DIR__ . '/../views/logjar-settings.php';
 	}
 
-	public static function getInstance(bool $logErrors = false): self
+	public static function getInstance(): self
 	{
 		if (self::$instance === null) {
-			self::$instance = new self($logErrors);
+			self::$instance = new self();
 		}
 
 		return self::$instance;

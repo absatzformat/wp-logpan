@@ -26,7 +26,13 @@ define('WPLogjar\MENU_SLUG', PLUGIN_SLUG);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-WPLogjar::getInstance();
+(function () {
+
+	$logjar = WPLogjar::getInstance();
+	$adaptor = $logjar->getLogAdaptor();
+
+	set_error_handler([$adaptor, 'errorHandler']);
+})();
 
 if (!function_exists('logjar')) {
 
