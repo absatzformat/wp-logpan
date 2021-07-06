@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/logjar/logger.git",
-                "reference": "22a536531b4498a6745b04e05034b03ef6d253de"
+                "reference": "0635b39f996610fed8a5ee818ce1bd2a832a53a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/logjar/logger/zipball/22a536531b4498a6745b04e05034b03ef6d253de",
-                "reference": "22a536531b4498a6745b04e05034b03ef6d253de",
+                "url": "https://api.github.com/repos/logjar/logger/zipball/0635b39f996610fed8a5ee818ce1bd2a832a53a9",
+                "reference": "0635b39f996610fed8a5ee818ce1bd2a832a53a9",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 "source": "https://github.com/logjar/logger/tree/main",
                 "issues": "https://github.com/logjar/logger/issues"
             },
-            "time": "2021-07-05T22:12:19+00:00"
+            "time": "2021-07-06T19:03:23+00:00"
         },
         {
             "name": "psr/log",

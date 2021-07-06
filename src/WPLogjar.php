@@ -6,14 +6,21 @@ namespace WPLogjar;
 
 use Logjar\Logger\Logger;
 use Logjar\Logger\SocketHandler;
+use Psr\Log\LoggerInterface;
 
 final class WPLogjar
 {
 	/** @var null|self */
 	protected static $instance;
 
-	/** @var LogAdaptor */
-	protected $logAdaptor;
+	/** @var LoggerInterface */
+	protected $logger;
+
+	/** @var Debugger */
+	protected $debugger;
+
+	/** @var ErrorHandler */
+	protected $errorHandler;
 
 	protected function __construct()
 	{
@@ -26,21 +33,25 @@ final class WPLogjar
 			empty($options['log_path']) ? '/channel' : $options['log_path']
 		);
 
-		$this->logAdaptor = new LogAdaptor(true);
-		$this->logAdaptor->setLogger(new Logger($handler));
+		// var_dump($handler);
+
+		// $handler = new FileWriter(__DIR__ . '/debug.log');
+
+		$this->logger = new Logger($handler);
+
+		$this->debugger = new Debugger($this->logger);
+		$this->errorHandler = new ErrorCatcher($this->logger);
 
 		if (is_admin()) {
 
 			add_action('admin_menu', [$this, 'adminMenu']);
 			add_action('admin_init', [$this, 'adminInit']);
 		}
-
-		add_action('shutdown', [$this->logAdaptor, 'flushDebugLines']);
 	}
 
-	public function getLogAdaptor(): LogAdaptor
+	public function getDebugger(): Debugger
 	{
-		return $this->logAdaptor;
+		return $this->debugger;
 	}
 
 	public function adminMenu(): void

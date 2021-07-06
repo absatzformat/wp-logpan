@@ -26,24 +26,18 @@ define('WPLogjar\MENU_SLUG', PLUGIN_SLUG);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-(function () {
-
-	$logjar = WPLogjar::getInstance();
-	$adaptor = $logjar->getLogAdaptor();
-
-	set_error_handler([$adaptor, 'errorHandler']);
-})();
+WPLogjar::getInstance();
 
 if (!function_exists('logjar')) {
 
 	function logjar(): void
 	{
 		$args = func_get_args();
-		$adaptor = WPLogjar::getInstance()->getLogAdaptor();
-		$level = $adaptor->getBacktraceLevel();
+		$debugger = WPLogjar::getInstance()->getDebugger();
+		$level = $debugger->getBacktraceLevel();
 
-		$adaptor->setBacktraceLevel($level + 1);
-		$adaptor->debug(...$args);
-		$adaptor->setBacktraceLevel($level);
+		$debugger->setBacktraceLevel($level + 1);
+		$debugger->debug(...$args);
+		$debugger->setBacktraceLevel($level);
 	}
 }
